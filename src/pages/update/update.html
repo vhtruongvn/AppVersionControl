@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Update Available
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <p>Current app Version: <span><b>{{shareService.getFullAppVersion()}}</b></span></p>
+  <p>Latest app Version: <span><b>{{shareService.getFullLatestAppVersion()}}</b></span></p>
+  <button ion-button color="danger" (click)="updateButtonClicked($event)">Update</button>
+</ion-content>
