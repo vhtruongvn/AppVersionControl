@@ -22,6 +22,7 @@ export class MyApp {
   rootPage:any = HomePage;
   modal: any = null;
   modalPage:any = null;
+  tryAgainAlert:any = null;
 
   // The app should not function if the user is 2 releases behind
   // Feel free to change the 3 values below for testing
@@ -59,7 +60,8 @@ export class MyApp {
         if (this.shareService.getForceUpdate()) {
           this.showModal(UpdatePage);
         } else {
-          this.dismissModal(); // if any
+          this.dismissModal(); // if any present
+          this.dismissTryAgainAlert(); // if present
         }
 
         if (this.shareService.getFailedToCheckAppVersion() && !this.shareService.isCheckingAppVersion()) {
@@ -202,22 +204,30 @@ export class MyApp {
   }
 
   showTryAgainAlert() {
-    let tryAgain = this.alertCtrl.create({
-      title: 'Oops',
-      message: 'Unable to check the app version',
-      buttons: [
-        {
-          text: 'Try Again',
-          handler: () => {
-            tryAgain.dismiss().then(() => {
-              this.getLatestAppVersion();
-            })
+    if (this.tryAgainAlert ===  null) {
+      this.tryAgainAlert = this.alertCtrl.create({
+        title: 'Oops',
+        message: 'Unable to check the app version',
+        buttons: [
+          {
+            text: 'Try Again',
+            handler: () => {
+              this.tryAgainAlert.dismiss().then(() => {
+                this.getLatestAppVersion();
+              })
+            }
           }
-        }
-      ],
-      enableBackdropDismiss: false
-    });
-    tryAgain.present();
+        ],
+        enableBackdropDismiss: false
+      });
+    }
+    this.tryAgainAlert.present();
+  }
+
+  dismissTryAgainAlert() {
+    if (this.tryAgainAlert !==  null) {
+      this.tryAgainAlert.dismiss();
+    }
   }
 
   showAlert(title, message, autoDismiss = false) {
